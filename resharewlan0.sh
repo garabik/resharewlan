@@ -2,7 +2,12 @@
 
 set -e
 
+# name of the virtual interface
 IFACE=resharewl
+
+# ip address of the internal network
+# do not forget to set up your dhcp server accordingly
+internalip=192.168.56.1
 
 rfkill unblock wlan
 sleep 1
@@ -27,6 +32,8 @@ cat /root/hostapd-reshare.template.conf | sed -e "s/@@@CHANNEL@@@/$channel/g" > 
 iw wlan0 set power_save on
 
 macchanger -e $IFACE
+# if you do not have macchanger instsalled, 
+# you can set the (virtual iface) MAC address manualy here
 #ip link set dev $IFACE  address 00:11:22:33:44:55
 
 INETIP=`ifdata  -pa wlan0`
@@ -35,7 +42,7 @@ sleep 1
 hostapd /tmp/hostapd-reshare.conf &
 sleep 2
 ifconfig $IFACE up
-ifconfig $IFACE 192.168.56.1
+ifconfig $IFACE $internalip
 sleep 2
 iptables -t nat -F
 iptables -F
