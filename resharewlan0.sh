@@ -23,7 +23,7 @@ ap=`iw dev wlan0 link|grep 'Connected to' |cut -d ' ' -f 3`
 echo '***' AP  $ap
 [ -z $ap ] && exit 1
 
-channel=`iw dev wlan0 scan|grep -A 36 -i $ap|grep 'primary channel'|cut -d : -f 2`
+channel=`iw dev wlan0 scan passive|grep -A 36 -i $ap|grep 'primary channel'|cut -d : -f 2`
 echo '***' AP $ap channel $channel
 [ -z $channel ] && exit 1
 
